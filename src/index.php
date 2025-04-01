@@ -9,106 +9,82 @@ include_once("config.php");
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">	
 	<title>ENDUROZONE</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<div>
-	<header>
-		<h1>ENDUROZONE</h1>
+<div class="container mt-5">
+	<header class="text-center mb-4">
+		<h1 class="display-4">ENDUROZONE</h1>
 	</header>
 
 	<main>
-	<ul>
-		<li><a href="index.php">Inicio</a></li>
-		<li><a href="add.html">Alta</a></li>
-	</ul>
-	<h2>MOTOS</h2>
-	<table border="1">
-	<thead>
-		<tr>
-			<th>MARCA</th>
-			<th>MODELO</th>
-			<th>AÑO DE FABRICACIÓN</th>
-			<th>PRECIO</th>
-			<th>STOCK</th>
-			<th>ACCIONES</th>
-		</tr>
-	</thead>
-	<tbdody>
+		<ul class="nav justify-content-center mb-4">
+			<li class="nav-item">
+				<a class="nav-link active" href="index.php">Inicio</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="add.html">Alta</a>
+			</li>
+		</ul>
+
+		<h2 class="text-center mb-4">MOTOS</h2>
+		<table class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>MARCA</th>
+					<th>MODELO</th>
+					<th>AÑO DE FABRICACIÓN</th>
+					<th>PRECIO</th>
+					<th>STOCK</th>
+					<th>ACCIONES</th>
+				</tr>
+			</thead>
+			<tbody>
 
 <?php
-/*Se realiza una consulta de selección la tabla empleados ordenados y almacena todos los registros en una estructura especial PARECIDA a una "tabla" llamada $resultado.
-Cada fila y cada columna de la tabla se corresponde con un registro y campo de la tabla EMPLEADOS.
-*/
+/* Se realiza una consulta de selección de la tabla motos ordenados por modelo y marca */
+$query = "SELECT motos_id, marca, modelo, anio_fabricacion, precio, stock FROM motos ORDER BY modelo, marca";
+$resultado = $mysqli->query($query);
 
-$resultado = $mysqli->query("SELECT * FROM motos ORDER BY modelo, marca");
+// Comprobamos si la consulta fue exitosa
+if ($resultado === false) {
+    echo "<div class='alert alert-danger'>Error en la consulta de la base de datos.</div>";
+} else {
+    // Comprobamos si se encontraron registros
+    if ($resultado->num_rows > 0) {
+        // Recorremos cada fila de la consulta
+        while($fila = $resultado->fetch_assoc()) {
+            echo "<tr>\n";
+            echo "<td>" . htmlspecialchars($fila['marca']) . "</td>\n";
+            echo "<td>" . htmlspecialchars($fila['modelo']) . "</td>\n";
+            echo "<td>" . htmlspecialchars($fila['anio_fabricacion']) . "</td>\n";
+            echo "<td>" . htmlspecialchars($fila['precio']) . "</td>\n";
+            echo "<td>" . htmlspecialchars($fila['stock']) . "</td>\n";
+            echo "<td>";
+            echo "<a href=\"edit.php?motos_id=" . urlencode($fila['motos_id']) . "\" class=\"btn btn-warning btn-sm\">Edición</a>\n";
+            echo "<a href=\"delete.php?motos_id=" . urlencode($fila['motos_id']) . "\" class=\"btn btn-danger btn-sm\" onClick=\"return confirm('¿Está segur@ que desea eliminar la moto?')\">Baja</a></td>\n";
+            echo "</tr>\n";
+        }
+    } else {
+        echo "<tr><td colspan='6' class='text-center'>No se encontraron motos.</td></tr>";
+    }
+}
 
-//Cierra la conexión de la BD
+// Cierra la conexión de la BD
 $mysqli->close();
-
-/*
-A continuación indicamos distintos manera de leer cada fila de la tabla anterior: 
-mysqli_fetch_array()- Almacena una fila de la tabla anterior, $resultado, en un array asociativo, numérico o ambos
-mysqli_fetch_assoc()-  Almacena una fila de la tabla anterior, , $resultado, SOLO en un array asociativo
-mysqli_fetch_row() - Almacena una fila de la tabla anterior, , $resultado, en un array numérico
-
-Veamos la diferencia entre un array numérico y asosiativo. Antes que nada supongamos que hemos leido el 1º registro de la tabla:
-id=1
-apellido=Coloma
-nombre=Javier
-edad=25
-puesto=contable
-
-ARRAYS NUMÉRICO (se accede por índice). Donde los índices se corresponde con la POSICIÓN de cada campo en la tabla de empleados: 0->id, 1->Apellido, 2->Nombre, 3->Edad y 4-> Puesto
-$fila[0] -> Contiene el contenido del campo id del empleado: 1
-$fila[1] -> Contiene el contenido del campo apellido: Coloma
-$fila[2] -> Contiene el contenido del campo apellido: Javier
-$fila[3] -> Contiene el contenido del campo edad: 25
-$fila[4] -> Contiene el el contenido del campo puesto: contable
-
-ARRAYS ASOCIATIVO (se acceder por nombre): Donde los índices (conocidos como claves) se corresponde con el NOMBRE de cada campo de la tabla de empleados: id, apellido, nombre, edad y puesto.
-$fila["id"] -> Contiene el contenido del campo id del empleado actual: 1
-$fila["apellido"] -> Contiene el contenido del campo apellido: Coloma
-$fila["nombre"] -> Contiene el contenido del campo nombre: Javier 
-$fila["edad"] -> Contiene el contenido del campo edad: 25
-$fila["puesto"] -> Contiene el el contenido del campo puesto: contable
-*/
-
-//Comprobamos si el nº de fila/registros es mayor que 0
- if ($resultado->num_rows > 0) {
-
-/* A través de la estructura repetitiva "while" se recorre la "tabla" $resultados almacenando cada línea/registro en el array asociativo $fila. 
-Recuerda que $fila contiene el contenido de todos los campos del registro actual tal como explicamos anteriormente.
-El bucle finaliza cuando se llegue a la última línea (o registro) de la tabla $resultado. 
-A medida que avanza se va consturyendo cada fila de la tabla HTML con todos los campos del empleado, hasta completar todos los registros*/
-
-	while($fila = $resultado->fetch_array()) {
-		echo "<tr>\n";
-		echo "<td>".$fila['marca']."</td>\n";
-		echo "<td>".$fila['modelo']."</td>\n";
-		echo "<td>".$fila['anio_fabricacion']."</td>\n";
-		echo "<td>".$fila['precio']."</td>\n";
-		echo "<td>".$fila['stock']."</td>\n";
-		echo "<td>";
-/* En la última columna se añade dos enlaces para editar y modificar el registro correspondiente. 
-Los datos se pueden enviar entre distintas páginas siguiendo distintos métodos. En este caso el id del registro a editar/eliminar se pasa a través de la URL. 
-Este forma de pasar el dato se conoce como: método GET*/
-		echo "<a href=\"edit.php?motos_id=$fila[motos_id]\">Edición</a>\n";
-		echo "<a href=\"delete.php?motos_id=$fila[motos_id]\" onClick=\"return confirm('¿Está segur@ que desea eliminar la moto?')\" >Baja</a></td>\n";
-		echo "</td>";
-		echo "</tr>\n";
-	}//fin mientras
- }//fin si
 ?>
-	</tbdody>
-	</table>
+			</tbody>
+		</table>
 	</main>
-	<footer>
-    	Created by the IES Miguel Herrero team &copy; 2025
+
+	<footer class="text-center mt-5">
+    	<p>Created by the IES Miguel Herrero team &copy; 2025</p>
   	</footer>
 </div>
 </body>
