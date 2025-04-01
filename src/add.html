@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta Moto</title>
+</head>
+<body>
+<div>
+    <header>
+        <h1>ENDUROZONE</h1>
+    </header>
+    <main>                
+    <ul>
+        <li><a href="index.php">Inicio</a></li>
+        <li><a href="add.html">Alta</a></li>
+    </ul>
+    <h2>Alta de Moto</h2>
+
+    <form action="add_action.php" method="post">
+        <div>
+            <label for="marca">Marca</label>
+            <input type="text" name="marca" id="marca" placeholder="Marca" required>
+        </div>
+
+        <div>
+            <label for="modelo">Modelo</label>
+            <input type="text" name="modelo" id="modelo" placeholder="Modelo" required>
+        </div>
+
+        <div>
+            <label for="anio_fabricacion">Año de Fabricación</label>
+            <input type="number" name="anio_fabricacion" id="anio_fabricacion" required>
+        </div>
+
+        <div>
+            <label for="cilindrada">Cilindrada</label>
+            <select name="cilindrada" id="cilindrada" required>
+                <option value="" disabled selected>Selecciona una Cilindrada</option>
+                <option value="125">125cc</option>
+                <option value="250">250cc</option>
+                <option value="300">300cc</option>
+                <option value="350">350cc</option>
+                <option value="450">450cc</option>
+            </select>    
+        </div>
+
+        <div>
+            <label for="precio">Precio (€)</label>
+            <input type="number" name="precio" id="precio" placeholder="Precio" step="0.01" min="0" required>
+        </div>
+
+        <div>
+            <label for="stock">Stock</label>
+            <input type="number" name="stock" id="stock" placeholder="Stock disponible" min="0" required>
+        </div>
+
+        <div>
+            <input type="submit" name="inserta" value="Agregar">
+            <input type="reset" value="Cancelar">
+        </div>
+    </form>
+    
+    </main>    
+    <footer>
+        Created by the IES Miguel Herrero team &copy; 2025
+    </footer>
+</div>
+</body>
+</html>
+
