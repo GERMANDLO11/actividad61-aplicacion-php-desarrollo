@@ -39,6 +39,7 @@ include_once("config.php");
 				<tr>
 					<th>MARCA</th>
 					<th>MODELO</th>
+					<th>CILINDRADA</th>
 					<th>AÑO DE FABRICACIÓN</th>
 					<th>PRECIO</th>
 					<th>STOCK</th>
@@ -49,7 +50,7 @@ include_once("config.php");
 
 <?php
 /* Se realiza una consulta de selección de la tabla motos ordenados por modelo y marca */
-$query = "SELECT motos_id, marca, modelo, anio_fabricacion, precio, stock FROM motos ORDER BY modelo, marca";
+$query = "SELECT motos_id, marca, modelo,cilindrada, anio_fabricacion, precio, stock FROM motos ORDER BY modelo, marca";
 $resultado = $mysqli->query($query);
 
 // Comprobamos si la consulta fue exitosa
@@ -63,6 +64,7 @@ if ($resultado === false) {
             echo "<tr>\n";
             echo "<td>" . htmlspecialchars($fila['marca']) . "</td>\n";
             echo "<td>" . htmlspecialchars($fila['modelo']) . "</td>\n";
+			echo "<td>" . htmlspecialchars($fila['cilindrada']) . "</td>\n";
             echo "<td>" . htmlspecialchars($fila['anio_fabricacion']) . "</td>\n";
             echo "<td>" . htmlspecialchars($fila['precio']) . "</td>\n";
             echo "<td>" . htmlspecialchars($fila['stock']) . "</td>\n";

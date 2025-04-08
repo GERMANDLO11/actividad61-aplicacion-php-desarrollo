@@ -26,8 +26,8 @@ if(isset($_POST['modifica'])) {
     $idmotos = $mysqli->real_escape_string($_POST['motos_id']);
     $marca = $mysqli->real_escape_string($_POST['marca']);
     $modelo = $mysqli->real_escape_string($_POST['modelo']);
-    $anio_fabricacion = $mysqli->real_escape_string($_POST['anio_fabricacion']);
     $cilindrada = $mysqli->real_escape_string($_POST['cilindrada']);
+    $anio_fabricacion = $mysqli->real_escape_string($_POST['anio_fabricacion']);
     $precio = $mysqli->real_escape_string($_POST['precio']);
     $stock = $mysqli->real_escape_string($_POST['stock']);
 
