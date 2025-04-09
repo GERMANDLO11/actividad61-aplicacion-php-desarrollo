@@ -89,11 +89,11 @@ include_once("config.php");
                     <label for="cilindrada" class="form-label">Cilindrada</label>
                     <select name="cilindrada" id="cilindrada" class="form-select">
                         <option value="<?php echo htmlspecialchars($cilindrada); ?>" selected><?php echo htmlspecialchars($cilindrada); ?></option>
-                        <option value="125cc">125cc</option>
-                        <option value="250cc">250cc</option>
-                        <option value="300cc">300cc</option>
-                        <option value="350cc">350cc</option>
-                        <option value="450cc">450cc</option>
+                        <option value="125cc">125</option>
+                        <option value="250cc">250</option>
+                        <option value="300cc">300</option>
+                        <option value="350cc">350</option>
+                        <option value="450cc">450</option>
                     </select>    
                 </div>
 
