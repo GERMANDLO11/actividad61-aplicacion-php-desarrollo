@@ -1,11 +1,19 @@
-name: Docker Build and Push
+name: CI/CD
 
 on:
+  # Permite ejecutar el flujo de trabajo de manera manual
+  workflow_dispatch:
+  
+  # Ejecuta el flujo de trabajo al hacer un git push  
   push:
-    branches:
-      - main  # Se ejecutará cuando haya un push en main
+    branches: ["main"]
+
+  # Ejecuta el flujo de trabajo al hacer un pull request en main
+  pull_request:
+    branches: ["main"]
 
 jobs:
+  # Trabajo 1: Construir y subir la imagen a Docker Hub (CI)
   build-and-push:
     runs-on: ubuntu-latest
 
@@ -16,18 +24,33 @@ jobs:
       - name: Login en Docker Hub
         uses: docker/login-action@v3
         with:
-# Hay que configurar los siguientes secretos
-# Settings > Secrets and variables > Actions > New repository secret
-# DOCKER_USERNAME → Tu usuario de Docker Hub.
-# DOCKER_PASSWORD → Tu token de acceso de Docker Hub (en lugar de la contraseña, genera un token en Docker Hub).
-
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Construir y etiquetar la imagen
+      - name: Construir y etiquetar la imagen (BUILD)
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/mi-imagen:latest .
-      
-      - name: Subir imagen a Docker Hub
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/lamp-crud-app:latest .
+
+      - name: Subir imagen a Docker Hub (PUSH)
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/mi-imagen:latest      
+          docker push ${{ secrets.DOCKER_USERNAME }}/lamp-crud-app:latest
+
+  # Trabajo 2: Desplegar en servidor de producción (CD)
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+
+    steps:
+      - name: Despliegue en servidor de producción
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd environment/aplicacion-crud-php-produccion/
+            git pull origin main
+            docker compose down
+            docker compose pull apache
+            docker compose up -d
