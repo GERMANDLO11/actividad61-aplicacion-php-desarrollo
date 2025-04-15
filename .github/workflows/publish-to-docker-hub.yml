@@ -49,7 +49,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd environment/aplicacion-crud-php-produccion/
+            cd environment/actividad61-aplicacion-php-produccion/
             git pull origin main
             docker compose down
             docker compose pull apache
