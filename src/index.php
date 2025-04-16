@@ -24,14 +24,15 @@ include_once("config.php");
 	</header>
 
 	<main>
-		<ul class="nav justify-content-center mb-4">
-			<li class="nav-item">
-				<a class="nav-link active" href="index.php">Inicio</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="add.html">Alta</a>
-			</li>
-		</ul>
+	<ul class="nav justify-content-center mb-4 bg-light p-3 rounded shadow">
+  <li class="nav-item">
+    <a class="nav-link active text-primary fw-bold" href="index.php">Inicio</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-dark" href="add.html">Alta</a>
+  </li>
+</ul>
+
 
 		<h2 class="text-center mb-4">MOTOS</h2>
 		<table class="table table-bordered table-striped">
