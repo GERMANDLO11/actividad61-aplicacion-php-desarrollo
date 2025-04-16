@@ -20,7 +20,7 @@ include_once("config.php");
 <body>
 <div class="container mt-5">
 	<header class="text-center mb-4">
-		<h1 class="display-4">ENDUROZONE</h1>
+		<h1 class="display-4">ZONAPADOCK</h1>
 	</header>
 
 	<main>
